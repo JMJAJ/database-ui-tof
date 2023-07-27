@@ -1,6 +1,8 @@
 <?php
+// archive.php
 session_start();
 
+// Check if the user is logged in. If not, redirect to the login page.
 if (!isset($_SESSION['username'])) {
     header('Location: login.php');
     exit();
@@ -14,6 +16,7 @@ if (!isset($_SESSION['username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Explorer</title>
     <style>
+        /* Add the CSS styles for the file explorer here */
         body {
             font-family: Arial, sans-serif;
             background-color: #222;
@@ -66,6 +69,7 @@ if (!isset($_SESSION['username'])) {
             cursor: pointer;
         }
 
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -92,6 +96,7 @@ if (!isset($_SESSION['username'])) {
             cursor: zoom-out;
         }
 
+        /* Navigation Arrows */
         .nav-arrows {
             display: flex;
             align-items: center;
@@ -123,11 +128,14 @@ if (!isset($_SESSION['username'])) {
 
     <div class="file-explorer" id="fileExplorer">
         <div class="folders" id="folderContainer">
+            <!-- Folders will be dynamically added here -->
         </div>
         <div class="images" id="imageContainer">
+            <!-- Images will be dynamically added here -->
         </div>
     </div>
 
+    <!-- Modal for image zoom -->
     <div id="imageModal" class="modal">
         <span class="modal-content">
             <img id="zoomedImage" class="modal-img" alt="Zoomed Image">
@@ -212,8 +220,8 @@ if (!isset($_SESSION['username'])) {
 
             function goBack() {
                 if (folderHistory.length > 1) {
-                    folderHistory.pop();
-                    const prevFolder = folderHistory.pop();
+                    folderHistory.pop(); // Remove current folder from history
+                    const prevFolder = folderHistory.pop(); // Get the previous folder
                     loadImages(prevFolder);
                 }
             }
@@ -236,6 +244,7 @@ if (!isset($_SESSION['username'])) {
                 modal.style.display = 'block';
                 modalImg.src = imageUrl;
 
+                // Close the modal when the user clicks outside the image
                 modal.onclick = function () {
                     modal.style.display = 'none';
                 };
