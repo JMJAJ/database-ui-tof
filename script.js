@@ -13,16 +13,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (subfolders.length > 0) {
             const subfolderList = document.createElement('ul');
-            subfolders.forEach(subfolder => {
+            subfolders.forEach((subfolder) => {
                 const subfolderItem = document.createElement('li');
-                subfolderItem.appendChild(createFolderElement(subfolder, []));
-                subfolderItem.onclick = () => navigateToSubfolder(folderName + '/' + subfolder);
+                subfolderItem.appendChild(createFolderElement(`${folderName}/${subfolder.folderName}`, subfolder.subfolders));
+                subfolderItem.onclick = () => loadImages(`${folderName}/${subfolder.folderName}`);
                 subfolderList.appendChild(subfolderItem);
             });
             folderElement.appendChild(subfolderList);
         }
 
-        folderElement.onclick = () => navigateToSubfolder(folderName);
+        folderElement.onclick = () => loadImages(folderName);
         return folderElement;
     }
 
@@ -47,14 +47,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function loadImages(folderName = 'UI') {
         try {
-            const response = await fetch(`get_images.php?folder=${encodeURIComponent(folderName)}`);
+            const response = await fetch(`https://raw.githubusercontent.com/JMJAJ/database-ui-tof/main/UI/${encodeURIComponent(folderName)}/data.json`);
             const data = await response.json();
             folderContainer.innerHTML = '';
             folderContainer.appendChild(createFolderElement(folderName, data.subfolders));
             imageContainer.innerHTML = '';
-            data.images.forEach(imgFileName => {
-                const imgUrl = folderName + '/' + imgFileName;
-                addImageToGallery(imgUrl, imgFileName);
+            data.images.forEach((imageData) => {
+                const imgUrl = `https://raw.githubusercontent.com/JMJAJ/database-ui-tof/main/UI/${encodeURIComponent(folderName)}/${encodeURIComponent(imageData.fileName)}`;
+                addImageToGallery(imgUrl, imageData.fileName);
             });
             currentFolder = folderName;
             folderHistory.push(folderName);
